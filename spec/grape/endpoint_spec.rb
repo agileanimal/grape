@@ -721,7 +721,15 @@ describe Grape::Endpoint do
         last_response.body.should == "http://example.org/#{version}/url"
       end
     end
-    it 'should include prefix' do
+    it 'should include prefix without an version specified' do
+      subject.prefix 'api'
+      subject.get('/url') do
+        request.url
+      end
+      get '/v1/url'
+      last_response.body.should == "http://example.org/api/url"
+    end
+    it 'should include prefix with a version specified' do
       subject.version 'v1', using: :path
       subject.prefix 'api'
       subject.get('/url') do
